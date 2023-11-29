@@ -1,5 +1,6 @@
-__pycache__/
+v__pycache__/
 *.py[cod]
 *.zip
 .DS_Store
 src/env/*
+env
