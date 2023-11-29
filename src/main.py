@@ -32,7 +32,7 @@ def get_todos(request: Request, todo: Annotated[str, Form()]):
     cursor.execute(query)
     todos = cursor.fetchall()    
     senderid = todo
-    return templates.TemplateResponse("indexs.html", {"request": request, "todos": todos, "senderid": senderid})
+    return templates.TemplateResponse("index.html", {"request": request, "todos": todos, "senderid": senderid})
 
 
 @app.post("/todos")
