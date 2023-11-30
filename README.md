@@ -4,7 +4,7 @@ Folgende Funktionalität soll die ToDo Anwendung enthalten:
 
 1. Erstellen eines ToDos
 2. ToDos anzeigen
-3. Status eines ToDos ändern von "open" zu "in progess"
+3. Status eines ToDos ändern von "open" zu "in progress"
 4. Status ändern von "in progress" zu "finished"
 5. Löschen eines ToDos
 
