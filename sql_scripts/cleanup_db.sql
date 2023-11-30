@@ -1,0 +1,3 @@
+DROP USER IF EXISTS 'todo'@'localhost';
+FLUSH PRIVILEGES;
+DROP DATABASE IF EXISTS todosdb;

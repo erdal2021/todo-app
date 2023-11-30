@@ -22,6 +22,13 @@ def create_db_connection():
         print(f"Error: {e}")
         raise
 
+def reset_auto_increment():
+    connection = create_db_connection()
+    cursor = connection.cursor()
+    query = "ALTER TABLE todos AUTO_INCREMENT = 1"
+    cursor.execute(query)
+    connection.commit()
+
 @app.get("/", response_class=HTMLResponse)
 async def read_todos(request: Request):
     connection = create_db_connection()
@@ -59,6 +66,9 @@ async def delete_todo(todo_id: int):
     data = (todo_id,)
     cursor.execute(query, data)
     connection.commit()
+    
+    reset_auto_increment()  # Reset auto-increment after deleting a row
+    
     return RedirectResponse(url=f"/?message=ToDo {todo_id} deleted successfully", status_code=302)
 
 if __name__ == "__main__":
