@@ -19,7 +19,8 @@
 
                             <h4 class="text-center my-3 pb-3">To Do App</h4>
 
-                            <form action="/todos" method="post" class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
+                            <form action="/todos" method="post"
+                                class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
                                 <div class="col-12">
                                     <div class="form-outline">
                                         <input type="text" name="todo" class="form-control"
@@ -42,49 +43,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for todo in todos %}
                                     <tr>
-                                        <th scope="row">1</th>
-                                        <td>Buy groceries for next week</td>
-                                        <td>open</td>
+                                        <th scope="row">{{ todo.id }}</th>
+                                        <td>{{ todo.item }}</td>
+                                        <td>{{ todo.stat }}</td>
                                         <td class="d-flex">
-                                            <form class="w-50">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                            <form class="w-50">
+                                            <form action="/update_status/{{ todo.id }}/in_progress" method="post">
                                                 <button type="submit" class="btn btn-success ms-1">Start</button>
                                             </form>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Buy groceries for next week</td>
-                                        <td>In progress</td>
-                                        <td class="d-flex">
-                                            <form class="w-50">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            <form action="/update_status/{{ todo.id }}/finished" method="post">
+                                                <button type="submit" class="btn btn-success ms-1">Finish</button>
                                             </form>
-                                            <form class="w-50">
-                                                <button type="submit" class="btn btn-success ms-1">Finished</button>
+                                            <form action="/delete_todo/{{ todo.id }}" method="post">
+                                                <button type="submit" class="btn btn-danger ms-1">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td><s>Buy groceries for next week</s></td>
-                                        <td>Finished</td>
-                                        <td class="d-flex">
-                                            <form class="w-50">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                            <form class="w-50">
-                                                <button type="submit"
-                                                    class=" disabled btn btn-success ms-1">Finished</button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
