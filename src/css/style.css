@@ -1,0 +1,7 @@
+body {
+    background-image: url('../img/background.png');  /* Pfad zum Bild  */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;  /* Setze die Höhe auf die gewünschte Größe */
+}
