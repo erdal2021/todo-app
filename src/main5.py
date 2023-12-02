@@ -10,7 +10,7 @@ templates = Jinja2Templates(directory="templates")
 app = FastAPI()
 
 DB_USER = "todo"
-DB_PASSWORD = "TodoApp!"
+DB_PASSWORD = "1234"
 DB_HOST = "localhost"
 DB_NAME = "todosdb"
 
@@ -22,6 +22,13 @@ def create_db_connection():
         print(f"Error: {e}")
         raise
 
+def reset_auto_increment():
+    connection = create_db_connection()
+    cursor = connection.cursor()
+    query = "ALTER TABLE todos AUTO_INCREMENT = 1"
+    cursor.execute(query)
+    connection.commit()
+
 @app.get("/", response_class=HTMLResponse)
 async def read_todos(request: Request):
     connection = create_db_connection()
@@ -29,7 +36,7 @@ async def read_todos(request: Request):
     query = "SELECT * FROM todos;"
     cursor.execute(query)
     todos = cursor.fetchall()
-    return templates.TemplateResponse("index.html", {"request": request, "todos": todos})
+    return templates.TemplateResponse("index5.html", {"request": request, "todos": todos})
 
 @app.post("/todos")
 async def create_todo(todo: str = Form(...)):
@@ -41,15 +48,6 @@ async def create_todo(todo: str = Form(...)):
     connection.commit()
     return RedirectResponse(url="/?message=ToDo created successfully", status_code=302)
 
-@app.post("/update_status/{todo_id}/{new_status}")
-async def update_status(todo_id: int, new_status: str):
-    connection = create_db_connection()
-    cursor = connection.cursor()
-    query = "UPDATE todos SET stat = %s WHERE id = %s"
-    data = (new_status, todo_id)
-    cursor.execute(query, data)
-    connection.commit()
-    return RedirectResponse(url=f"/?message=Status of ToDo {todo_id} updated to {new_status}", status_code=302)
 
 @app.post("/update_todo/{todo_id}")
 async def update_todo(request: Request, todo_id: int, newStatus: str = Form(...)):
@@ -63,6 +61,17 @@ async def update_todo(request: Request, todo_id: int, newStatus: str = Form(...)
     # Redirect back to the main page
     return RedirectResponse(url="/?message=Todo updated successfully", status_code=302)
 
+
+@app.post("/update_status/{todo_id}/{new_status}")
+async def update_status(todo_id: int, new_status: str):
+    connection = create_db_connection()
+    cursor = connection.cursor()
+    query = "UPDATE todos SET stat = %s WHERE id = %s"
+    data = (new_status, todo_id)
+    cursor.execute(query, data)
+    connection.commit()
+    return RedirectResponse(url=f"/?message=Status of ToDo {todo_id} updated to {new_status}", status_code=302)
+
 @app.post("/delete_todo/{todo_id}")
 async def delete_todo(todo_id: int):
     connection = create_db_connection()
@@ -71,6 +80,9 @@ async def delete_todo(todo_id: int):
     data = (todo_id,)
     cursor.execute(query, data)
     connection.commit()
+    
+    reset_auto_increment()  # Reset auto-increment after deleting a row
+    
     return RedirectResponse(url=f"/?message=ToDo {todo_id} deleted successfully", status_code=302)
 
 if __name__ == "__main__":
